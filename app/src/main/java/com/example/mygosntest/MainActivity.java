@@ -1,11 +1,13 @@
 package com.example.mygosntest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.mygosntest.jinjie.NewActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     Button isXL;
     @BindView(R.id.gsonbuilder)
     Button gsonbuilder;
+    @BindView(R.id.jinjie)
+    Button jinjie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +56,12 @@ public class MainActivity extends AppCompatActivity {
     //Gson.fromJson(Reader,Type);
     //Gson.fromJson(String,Type);
 
-    @OnClick({R.id.jibenyongfa, R.id.fanxing, R.id.unXL, R.id.isXL, R.id.gsonbuilder})
+    @OnClick({R.id.jibenyongfa, R.id.fanxing, R.id.unXL, R.id.isXL, R.id.gsonbuilder, R.id.jinjie})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.jinjie:
+                startActivity(new Intent(MainActivity.this, NewActivity.class));
+                break;
             case R.id.jibenyongfa:
                 jiexiGson();//基本数据类型解析
                 shengchengGson();//基本数据类型生成

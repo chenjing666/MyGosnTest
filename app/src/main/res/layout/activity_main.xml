@@ -36,4 +36,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="GsonBuilder用法" />
+
+    <Button
+        android:id="@+id/jinjie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="进阶" />
 </LinearLayout>
