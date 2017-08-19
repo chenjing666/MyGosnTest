@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.mygosntest.MainActivity">
+
+    <Button
+        android:id="@+id/jibenyongfa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="gson基本用法" />
+
+    <Button
+        android:id="@+id/fanxing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gson中使用泛型" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="生成JSON" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="解析JSON" />
+</LinearLayout>
