@@ -20,12 +20,20 @@
         android:text="Gson中使用泛型" />
 
     <Button
+        android:id="@+id/unXL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="生成JSON" />
+        android:text="Gson的流式反序列化" />
 
     <Button
+        android:id="@+id/isXL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="解析JSON" />
+        android:text="Gson的流式序列化" />
+
+    <Button
+        android:id="@+id/gsonbuilder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GsonBuilder用法" />
 </LinearLayout>

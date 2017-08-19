@@ -15,9 +15,17 @@ public class User {
     @SerializedName("email_address")//对于json中email_address这个属性对应POJO的属性则变成
     public String emailAddress;
 
+    public User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
     public User(String name, int age, String emailAddress) {
         this.name = name;
         this.age = age;
         this.emailAddress = emailAddress;
+    }
+
+    public User() {
     }
 }

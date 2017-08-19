@@ -7,8 +7,14 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -23,6 +29,12 @@ public class MainActivity extends AppCompatActivity {
     Button jibenyongfa;
     @BindView(R.id.fanxing)
     Button fanxing;
+    @BindView(R.id.unXL)
+    Button unXL;
+    @BindView(R.id.isXL)
+    Button isXL;
+    @BindView(R.id.gsonbuilder)
+    Button gsonbuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +44,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.jibenyongfa, R.id.fanxing})
+    //Gson提供了fromJson()和toJson() 两个直接用于解析和生成的方法，前者实现反序列化，后者实现了序列化。
+    //同时每个方法都提供了重载方法，我常用的总共有5个。
+    //Gson.toJson(Object);
+    //Gson.fromJson(Reader,Class);
+    //Gson.fromJson(String,Class);
+    //Gson.fromJson(Reader,Type);
+    //Gson.fromJson(String,Type);
+
+    @OnClick({R.id.jibenyongfa, R.id.fanxing, R.id.unXL, R.id.isXL, R.id.gsonbuilder})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.jibenyongfa:
@@ -47,7 +67,107 @@ public class MainActivity extends AppCompatActivity {
                 userResult();
                 userResult2();
                 break;
+            case R.id.unXL:
+                try {
+                    myunXL();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.isXL:
+                try {
+                    myXL();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.gsonbuilder:
+                //使用GsonBuilder导出null值、格式化输出、日期时间
+                myGsonBuilder();
+                break;
         }
+    }
+
+    private void myGsonBuilder() {
+        //Gson在默认情况下是不动导出值null的键的
+        Gson gson1 = new Gson();
+        User user1 = new User("怪盗kidou", 24);
+        Log.e("user1", gson1.toJson(user1));
+        System.out.println(gson1.toJson(user1)); //{"name":"怪盗kidou","age":24}
+
+        //这样就有了
+        Gson gson = new GsonBuilder()
+                //各种配置
+                .serializeNulls()
+                .create(); //生成配置好的Gson
+        User user = new User("怪盗kidou", 24);
+        Log.e("user", gson.toJson(user));
+        System.out.println(gson.toJson(user)); //{"name":"怪盗kidou","age":24,"email":null}
+
+        //其他用法
+        Gson gson2 = new GsonBuilder()
+                //序列化null
+                .serializeNulls()
+                // 设置日期时间格式，另有2个重载方法
+                // 在序列化和反序化时均生效
+                .setDateFormat("yyyy-MM-dd")
+                // 禁此序列化内部类
+                .disableInnerClassSerialization()
+                //生成不可执行的Json（多了 )]}' 这4个字符）
+                .generateNonExecutableJson()
+                //禁止转义html标签
+                .disableHtmlEscaping()
+                //格式化输出
+                .setPrettyPrinting()
+                .create();
+    }
+
+    /**
+     * Gson的流式反序列化
+     */
+    public void myunXL() throws IOException {
+        String json = "{\"name\":\"怪盗kidou\",\"age\":\"24\"}";
+        User user = new User();
+        JsonReader reader = new JsonReader(new StringReader(json));
+        reader.beginObject(); // throws IOException
+        while (reader.hasNext()) {
+            String s = reader.nextName();
+            switch (s) {
+                case "name":
+                    user.name = reader.nextString();
+                    break;
+                case "age":
+                    user.age = reader.nextInt(); //自动转换
+                    break;
+//                case "email":
+//                    user.email = reader.nextString();
+//                    break;
+            }
+        }
+        reader.endObject(); // throws IOException
+        System.out.println(user.name);  // 怪盗kidou
+        System.out.println(user.age);   // 24
+//        System.out.println(user.email); // ikidou@example.com
+    }
+
+    /**
+     * Gson的流式序列化
+     */
+    public void myXL() throws IOException {
+        //自动
+        Gson gson = new Gson();
+        User user = new User("怪盗kidou", 24, "ikidou@example.com");
+        gson.toJson(user, System.out); // 写到控制台
+
+        //手动
+        JsonWriter writer = new JsonWriter(new OutputStreamWriter(System.out));
+        writer.beginObject() // throws IOException
+                .name("name").value("怪盗kidou")
+                .name("age").value(24)
+                .name("email_address").nullValue() //演示null
+                .endObject(); // throws IOException
+        writer.flush(); // throws IOException
+        //{"name":"怪盗kidou","age":24,"email":null}
     }
 
     public void jiexiGson() {
